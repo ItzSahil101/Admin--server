@@ -68,6 +68,25 @@ router.get("/data", async (req, res) => {
   }
 });
 
+//Get One Product Data by id
+router.get("/data/:id", async (req, res) => {
+  try {
+    // console.log("Fetching product with ID:", req.params.id);
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({ error: "Invalid product ID format" });
+    }
+    const product = await Product.findById(req.params.id);
+    if (!product) {
+      return res.status(404).json({ error: "Product data not found" });
+    }
+    // console.log(product);
+    res.json(product);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
 // UPDATE product data by ID
 router.put("/data/:id", async (req, res) => {
   try {
