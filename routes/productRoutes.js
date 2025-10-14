@@ -4,6 +4,7 @@ const router = express.Router();
 const CustomProduct = require("../models/customProductModel");
 const Product = require("../models/productDataModel");
 const mongoose = require("mongoose");
+const userModel = require("../models/User.js");
 
 // ===== CUSTOM PRODUCTS ROUTES =====
 
@@ -81,6 +82,23 @@ router.get("/data/:id", async (req, res) => {
     }
     // console.log(product);
     res.json(product);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
+//Get user by User Id
+router.get("/data/user/:userId", async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    // const user = await userModel.findById(userId);
+    const user = "abc";
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    // console.log("Fetched user:", user);
+    return res.json(user);
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Server Error" });
