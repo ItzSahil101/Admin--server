@@ -95,7 +95,7 @@ router.get("/data/user/:userId", async (req, res) => {
     const userId = req.params.userId;
     console.log("Fetching user with ID:", userId);
     // For testing, send a dummy user
-    const user = { userName: data};
+    const user = { userName: "xyz"};
     const data = await userModel.findOne({ _id: userId }).select("userName -_id");
 
     if (!user) {
