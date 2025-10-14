@@ -4,7 +4,7 @@ const router = express.Router();
 const CustomProduct = require("../models/customProductModel");
 const Product = require("../models/productDataModel");
 const mongoose = require("mongoose");
-const userModel = require("../models/User");
+const userModel = require("../models/User.js");
 
 // ===== CUSTOM PRODUCTS ROUTES =====
 
@@ -92,28 +92,22 @@ router.get("/data/:id", async (req, res) => {
 // Get user by User Id
 router.get("/data/user/:userId", async (req, res) => {
   try {
-    const { userId } = req.params;
-
-    // ✅ Validate ObjectId
-    if (!mongoose.Types.ObjectId.isValid(userId)) {
-      return res.status(400).json({ error: "Invalid user ID" });
-    }
-
-    // ✅ Fetch from DB
-    const user = await userModel.findById(userId).select("userName -_id");
+    const userId = req.params.userId;
+    console.log("Fetching user with ID:", userId);
+    // For testing, send a dummy user
+    const data = "";
+    const user = { userName: "abc"}; // 👈 note the object
 
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
 
-    // ✅ Return object with userName
-    return res.json(user);
+    return res.json(user); // ✅ frontend expects an object with userName
   } catch (err) {
-    console.error("Error fetching user:", err);
+    console.error(err);
     res.status(500).json({ message: "Server Error" });
   }
 });
-
 
 
 // UPDATE product data by ID
