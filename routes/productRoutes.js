@@ -93,6 +93,7 @@ router.get("/data/:id", async (req, res) => {
 router.get("/data/user/:userId", async (req, res) => {
   try {
     const userId = req.params.userId;
+    console.log("Fetching user with ID:", userId);
     // For testing, send a dummy user
     const user = { userName: "abc" }; // 👈 note the object
 
