@@ -92,22 +92,29 @@ router.get("/data/:id", async (req, res) => {
 // Get user by User Id
 router.get("/data/user/:userId", async (req, res) => {
   try {
-    const userId = req.params.userId;
-    console.log("Fetching user with ID:", userId);
-    // For testing, send a dummy user
-    const data = "";
-    const user = { userName: "abc"}; // 👈 note the object
+    const { userId } = req.params;
 
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
+    // Validate ObjectId
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({ error: "Invalid user ID" });
     }
 
-    return res.json(user); // ✅ frontend expects an object with userName
+    // Find user in DB
+    const user = await userModel.findById(userId).select("userName");
+
+    if (!user) {
+      // If user not found, fallback to userId
+      return res.json({ userName: userId });
+    }
+
+    // Return userName or fallback to userId
+    return res.json({ userName: user.userName || userId });
   } catch (err) {
-    console.error(err);
+    console.error("Error fetching user:", err);
     res.status(500).json({ message: "Server Error" });
   }
 });
+
 
 
 // UPDATE product data by ID
