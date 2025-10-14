@@ -89,21 +89,24 @@ router.get("/data/:id", async (req, res) => {
 });
 
 //Get user by User Id
+// Get user by User Id
 router.get("/data/user/:userId", async (req, res) => {
   try {
     const userId = req.params.userId;
-    // const user = await userModel.findById(userId);
-    const user = "abc";
+    // For testing, send a dummy user
+    const user = { userName: "abc" }; // 👈 note the object
+
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
-    // console.log("Fetched user:", user);
-    return res.json(user);
+
+    return res.json(user); // ✅ frontend expects an object with userName
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Server Error" });
   }
 });
+
 
 // UPDATE product data by ID
 router.put("/data/:id", async (req, res) => {
