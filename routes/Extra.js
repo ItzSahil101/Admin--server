@@ -91,4 +91,19 @@ router.get("/update", async (req, res) => {
   }
 });
 
+// ✅ DELETE UPDATE MESSAGE BY ID
+router.delete("/update/:id", async (req, res) => {
+  try {
+    const deletedUpdate = await UpdateMsg.findByIdAndDelete(req.params.id);
+    if (!deletedUpdate) {
+      return res.status(404).json({ message: "Update message not found" });
+    }
+    res.json({ message: "Update message deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting update message:", error);
+    res.status(500).json({ message: "Failed to delete update message" });
+  }
+});
+
+
 module.exports = router;
