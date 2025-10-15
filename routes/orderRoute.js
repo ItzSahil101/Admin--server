@@ -35,7 +35,7 @@ router.get("/normal", async (req, res) => {
 });
 
 // POST delete normal order
-router.post("/normal/delete/:id", async (req, res) => {
+router.post("/deln/:id", async (req, res) => {
   try {
     const order = await Order.findByIdAndDelete(req.params.id);
     if (!order) {
