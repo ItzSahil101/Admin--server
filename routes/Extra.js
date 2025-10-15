@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const User = require("../models/User");
 const Feedback = require("../models/Feedback");
+const UpdateMsg = require("../models/UpdateMsg");
 
 // ✅ Get all feedback from database
 router.get("/f", async (req, res) => {
@@ -57,5 +58,37 @@ router.delete("/users/:id", async (req, res) => {
   }
 });
 
+// ✅ POST NEW UPDATE MESSAGE
+// ============================
+router.post("/update", async (req, res) => {
+  try {
+    const { msg } = req.body;
+
+    if (!msg || msg.trim() === "") {
+      return res.status(400).json({ message: "Message is required" });
+    }
+
+    const newUpdate = new UpdateMsg({ msg });
+    await newUpdate.save();
+
+    res.status(201).json({ message: "Update message added successfully", newUpdate });
+  } catch (error) {
+    console.error("Error adding update message:", error);
+    res.status(500).json({ message: "Failed to add update message" });
+  }
+});
+
+// ============================
+// ✅ GET ALL UPDATE MESSAGES
+// ============================
+router.get("/update", async (req, res) => {
+  try {
+    const updates = await UpdateMsg.find().sort({ createdAt: -1 }); // latest first
+    res.json(updates);
+  } catch (error) {
+    console.error("Error fetching update messages:", error);
+    res.status(500).json({ message: "Failed to fetch update messages" });
+  }
+});
 
 module.exports = router;
