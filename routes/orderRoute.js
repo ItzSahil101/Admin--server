@@ -34,6 +34,21 @@ router.get("/normal", async (req, res) => {
   }
 });
 
+// POST delete normal order
+router.post("/normal/delete/:id", async (req, res) => {
+  try {
+    const order = await Order.findByIdAndDelete(req.params.id);
+    if (!order) {
+      return res.status(404).json({ msg: "Order not found" });
+    }
+    res.json({ msg: "Normal order deleted successfully" });
+  } catch (err) {
+    console.error("Error deleting normal order:", err);
+    res.status(500).json({ msg: "Server error" });
+  }
+});
+
+
 // GET custom orders enriched with user info
 router.get("/custom", async (req, res) => {
   try {
