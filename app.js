@@ -17,6 +17,9 @@ app.use("/api/orders", require("./routes/orderRoute"));
 // <== ADD this line to fix product routes:
 app.use("/api/products", require("./routes/productRoutes"));
 
+// Extra routes
+app.use("/api/extra", require("./routes/Extra"));
+
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
