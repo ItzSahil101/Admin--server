@@ -91,8 +91,7 @@ router.get("/update", async (req, res) => {
   }
 });
 
-// ✅ DELETE UPDATE MESSAGE BY ID
-router.delete("/update/:id", async (req, res) => {
+router.post("/update/delete/:id", async (req, res) => {
   try {
     const deletedUpdate = await UpdateMsg.findByIdAndDelete(req.params.id);
     if (!deletedUpdate) {
