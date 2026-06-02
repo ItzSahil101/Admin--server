@@ -73,4 +73,49 @@ router.get("/normal", async (req, res) => {
   }
 });
 
+
+router.get("/custom", async (req, res) => {
+  try {
+    const orders = await Order.find({})
+      .sort({ createdAt: -1 })
+      .lean();
+
+    console.log("Orders Found:", orders.length);
+
+    const userIds = [
+      ...new Set(
+        orders
+          .filter((o) => o.userId)
+          .map((o) => o.userId.toString())
+      ),
+    ];
+
+    const userMap = await getUserMap(userIds);
+
+    const enrichedOrders = orders.map((order) => {
+      const user = userMap[order.userId?.toString()] || {};
+
+      return {
+        ...order,
+        userNumber: user.number || "N/A",
+        userLocation: user.location || order.location || "N/A",
+        userName: user.name || "N/A",
+      };
+    });
+
+    res.status(200).json({
+      success: true,
+      count: enrichedOrders.length,
+      orders: enrichedOrders,
+    });
+  } catch (err) {
+    console.error("Error fetching normal orders:", err);
+
+    res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+});
+
 module.exports = router;
